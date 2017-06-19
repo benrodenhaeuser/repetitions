@@ -85,9 +85,51 @@ def generate_permutations(stock, chosen, permus)
   nil
 end
 
-
-puts Benchmark.realtime { permutations('abcd') } # 0.00016999989748001099
-puts Benchmark.realtime { permutations('abcdef') } #
-puts Benchmark.realtime { permutations('aaaaaaaaa') } # 2.2999942302703857e-05
+# puts Benchmark.realtime { permutations('abcd') } # 0.00016999989748001099
+# puts Benchmark.realtime { permutations('abcdef') } #
+# puts Benchmark.realtime { permutations('aaaaaaaaa') } # 2.2999942302703857e-05
 
 # the second solution is *a lot* more efficient for repetitive strings (see above) — which was kind of the point
+
+# iterative solution
+
+=begin
+how to turn this into an iterative solution?
+
+=end
+
+def get_stock(array_of_char)
+  stock = Hash.new { |hash, key| hash[key] = 0 }
+  array_of_char.each { |letter| stock[letter] += 1 }
+  stock
+end
+
+def choose(character, stock, permutation)
+  stock[character] -= 1
+  permutation << character
+  nil
+end
+
+def unchoose(character, stock, permutation)
+  stock[character] += 1
+  permutation.slice!(-1)
+  nil
+end
+
+def compute_permutations(stock, permutation = '', permutations = [])
+  if stock.values.all? { |count| count == 0 }
+    permutations << permutation.dup
+  else
+    stock.each_key do |character|
+      next if stock[character] == 0
+      choose(character, stock, permutation)
+      compute_permutations(stock, permutation, permutations)
+      unchoose(character, stock, permutation)
+    end
+  end
+  permutations
+end
+
+def permutations(string)
+  compute_permutations(get_stock(string.chars.sort))
+end
