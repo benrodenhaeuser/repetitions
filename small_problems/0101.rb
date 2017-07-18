@@ -4,20 +4,12 @@
 
 approach:
 
-- use a while loop
-- the loop counter is initially at 3
-- we break out of the loop once the counter has reached 0
-- we decrement on each iteration of the loop
-- during each iteration, we print the given string once
+- use the times method to print out the string as many times as required
 
 =end
 
-def repeat(string, number)
-  counter = number
-  while counter != 0
-    puts string
-    counter -= 1
-  end
+def print_times(string, number)
+  number.times { puts string }
 end
 
-repeat('Hello', 3)
+print_times('ben', 4)

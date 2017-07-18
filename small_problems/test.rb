@@ -1,22 +1,14 @@
-string = 'ben'
-p string.chars.map { |char| char * 2 }.join == 'bbeenn'
-p string.each_char.map { |char| char * 2 }.join == 'bbeenn'
+# p array1.select { |elem| !array2.include?(elem) }.first.to_i
 
-e = Enumerator.new do |y|
-  y << 1
-  y << 2
-  y << 3
+def find_missing(array1, array2)
+  sorted = array2.sort
+  array1.each_with_index do |elem, index|
+    return elem if sorted[index] != elem
+  end
+  return 0
 end
 
-p e
+array1 = [1, 2, 3, 4, 5, 6]
+array2 = [1, 4, 2, 3, 6]
 
-
-names = %w[ben julia tom]
-e = names.enum_for(:select)
-p e
-
-selection = e.each do |name|
-  name.start_with?('b')
-end
-
-p selection
+p find_missing(array1, array2)

@@ -4,21 +4,14 @@
 
 approach:
 
-- one way would be to convert the number to a string, split the string, and convert the characters to integers.
-- however, here it seems more natural to treat the problem as a "number problem".
-- to obtain the last digit of an integer n, we can use n % 10.
-- we can then work further by dividing the number by 10, and retrieving the last digit of the number, and so on.
-- we terminate once n is 0 (which means that we have already processed the last digit).
+- convert the integer to a string
+- split the string into individual characters (i.e., array of characters)
+- convert each character to an integer
 
 =end
 
 def digit_list(number)
-  list = []
-  while number != 0
-    list << number % 10
-    number = number / 10
-  end
-  list.reverse
+  number.to_s.chars.map(&:to_i)
 end
 
 puts digit_list(12345) == [1, 2, 3, 4, 5]     # => true
