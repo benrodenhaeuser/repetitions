@@ -8,6 +8,17 @@ def find_missing(array1, array2)
   return 0
 end
 
+def find_missing(array1, array2)
+  (array1 - array2).first.to_i
+end
+
+def find_missing(array1, array2)
+  array1.each do |elem|
+    return elem if !array2.include?(elem)
+  end
+  return 0
+end
+
 array1 = [1, 2, 3, 4, 5, 6]
 array2 = [1, 4, 2, 3, 6]
 
