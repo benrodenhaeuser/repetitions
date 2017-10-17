@@ -132,3 +132,6 @@ class Computer
 end
 
 # Explain the difference!
+
+# create_template: While the first version of the method assigns "template 14231" to the instance variable @template, the second version calls the setter method template= which then makes the same assignment. The return value of both methods is the same. Note that "self" in the second version is not optional
+# show_template: both versions call the getter method. In the second version, we choose to call the `template` setter with an explicit receiver. This is completely optional here and makes no difference. Again, the return value is the same.
