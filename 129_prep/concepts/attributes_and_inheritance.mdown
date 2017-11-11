@@ -1,0 +1,27 @@
+# Attributes and instance variables in the context of inheritance
+
+([Copied from notes by Pete Hanson](https://launchschool.com/posts/c279b82b#comment-63876))
+
+- An instance variable is named by the class, but *each object created from the class creates its own copy of the instance variable*, and its value contributes to the overall state of the object. With this definition, note in particular that *the instance variable is actually not part of the class*; therefore, *it can't be inherited*. The subclass does know about the name, but it's merely using that name as a handle for the value it contains.
+
+- An attribute is an instance variable name and value. *More specifically, an attribute must be accessible outside the methods defined by the class; this means you need either a getter or setter method, or both.* If either is missing, you only have an instance variable and a value (you can think of this as a "private attribute" if you want, but it doesn't really help). An attribute's getter and setter methods *will be inherited by a superclass*, but, the instance variable name and value behind the attribute do not participate in inheritance.
+
+- *State is the collection of all instance variables and their values defined for an object.* Every object has a unique state. *Since state is part of the object, not the class, state is not inherited.*
+
+- The following list should keep you out of trouble, at least for now:
+
+  - A subclass inherits the methods of the superclass.
+  - Instance variables and their values are not inheritable.
+  - Attribute getters and setters are methods, so they are inheritable
+  - Attribute names and their values are just instance variables and values, so
+    they are not inheritable
+  - State is a property of each object, so is not inheritable.
+
+----
+
+- **inheritance is on the level of behaviour**: "inheritance is when a class
+  (the subclass) inherits behaviour from another class (the superclass)" (from the OOP book).
+- an attribute is an instance variable name with a value for which we have
+  provided a getter and/or setter
+- the instance variables names of an object with their values make up the
+  state of the object.

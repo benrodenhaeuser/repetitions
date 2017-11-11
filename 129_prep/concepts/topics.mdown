@@ -1,0 +1,132 @@
+# 129 Interview Topics
+
+## Resources
+
+- [Object-Oriented Programming with Ruby](https://launchschool.com/books/oo_ruby/read/introduction)
+  - The Object Model DONE
+  - **Classes and Objects**
+  - Modules and Inheritance DONE
+- [129 Written Assessment](https://launchschool.com/exams/b1c818cc)
+- [Modules](https://launchschool.com/lessons/dfff5f6b/assignments/2cf31cc8)
+- [Pete's Post](https://launchschool.com/posts/c279b82b#comment-63876)
+
+## Topics
+
+- **polymorphism**
+  - polymorphism is the provision of a single interfaces for entities of
+    different types
+  - ad hoc polymorphism (two classes that have a method of the same name)
+  - mixin modules (two classes that include behaviour of module)
+  - inheritance (two classes that inherit interface of superclass)
+  - polymorphism with or without method overriding
+- **self**
+  - self evaluates to current default object (object receiving current message)
+  - use case: self as a prefix in class method definitions (i.e., self within)
+    class scope
+  - self in top-level scope, in t-l methods and t-l-contained blocks: `main`
+  - self within instance methods: the receiver (object on which method called)
+  - self within class methods: the class object
+  - use case: self as a return value (returning the current default object)
+  - use case: to "disambiguate"
+    - self when invoking class methods from instance methods (`class` keyword)
+    - self when calling setters (local variables)
+- **method lookup path**
+  - first, look in the class of which object is an instance
+  - second, look in included modules in reverse order
+    (module last included comes first)
+  - third, look in superclass, repeating steps 1 to 3
+- **class inheritance**
+  - a relationship between classes
+  - behaviour is inherited, not state
+  - inheriting behaviour: can use it out of the box!
+  - overriding inherited behaviour: more detailed, or different implementation
+  - super: overriding inherited behaviour while using it
+  - link to method lookup chain (traces it)
+- **single inheritance** (see assessment answer)
+  - single inheritance: every class inherits from one other class
+  - limitation: trying to model several hierarchies at once
+  - solution: modules
+- **attributes and inheritance**
+  - inheritance: on the level of behaviour! not ivars!
+  - inheritance: a relationship between classes, not between instances!
+  - attribute: ivar with value that is gettable/settable
+    - the getters/setters are inherited, but not the ivars and their values!  
+  - state: totality of ivars with values of an object – not inherited!
+- **classes vs modules**
+  - modules have no instances
+  - can include any number of modules
+  - modules typically for "has-a" relationship (or "adjectives")
+- **module use cases**
+  - mixins
+    - module contains *instance methods*
+    - include in class, call like other instance methods
+  - namespacing
+    - module contains *classes*
+    - call with `TheModule::TheClass`
+  - container
+    - module contains *module methods*  ,
+    - typically called with `TheModule.the_method`
+- **method access**
+  - public methods are said to comprise the class's interface
+  - private and protected methods contain implementation details
+  - private methods:
+    - can only be called without explicit receiver
+    - thus can only be called where self evaluates to instance of class
+  - protected methods:
+    - from outside the class, are like private methods (cannot be called)
+    - when self evaluates to instance of class, can be called with explicit
+      receiver
+- **accidental method overriding**
+  - every class (that is not explicitly made to be child of another class) is a
+    child of the `Object` class. this entails that every class has access to Object (and Kernel) methods.
+  - every class can override behaviour of superclasses. modules that are
+    included can also "override" behaviour defined in
+    superclasses.
+  - there is a lot of potential for overriding methods accidentally that were
+    defined higher up in the inheritance hierarchy! (example: `send` method)
+- **instance variables and instance methods**
+  - instance methods defined in a class constitute the behaviour of instances
+    of the class. they are available to be called (explicitly or implicitly) on (all and only the) instances of the class.
+
+## More Topics
+
+- instance variables and instance methods
+- encapsulation
+- class variables and class methods
+- instance variables in included modules (robert's example)
+
+----
+
+What's going on here? Are there private class methods?
+
+
+class Human
+
+  def self.class_adress
+    self.adress
+  end
+
+  def full_adress
+    adress + ' Czech Republic'
+  end
+
+  def equal_age(other_person)
+    has_the_same_age(other_person)
+  end
+
+  private
+
+  def self.adress
+    'Prague'
+  end
+
+  def has_the_same_age(other)
+    age == other.age
+  end
+
+  protected
+
+  def age
+    30
+  end
+end
