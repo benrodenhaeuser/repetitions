@@ -34,7 +34,7 @@ def render_content(path_to_file)
     headers['Content-Type'] = 'text/plain'
     content
   elsif File.extname(path_to_file) == '.md'
-    render_markdown(content)
+    erb(render_markdown(content))
   end
 end
 
