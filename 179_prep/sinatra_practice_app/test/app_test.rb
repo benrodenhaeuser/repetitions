@@ -15,14 +15,16 @@ class AppTest < Minitest::Test
 
   def test_hello_world
     get '/'
+    assert_equal 302, last_response.status
+    get last_response['Location']
     assert_equal 200, last_response.status
-    assert_includes last_response.body, 'hello world'
+    assert_includes last_response.body, '<ul>'
+
   end
 
-  def test_hello_from_erb
-    get '/erb'
+  def test_index
+    get '/index'
     assert_equal 200, last_response.status
-    assert_includes last_response.body, '<h1>hello'
+    assert_includes last_response.body, '<ul>'
   end
-
 end
