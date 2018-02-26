@@ -27,4 +27,11 @@ class AppTest < Minitest::Test
     assert_equal 200, last_response.status
     assert_includes last_response.body, '<ul>'
   end
+
+  def test_a_document
+    get '/about.txt'
+    assert_equal 200, last_response.status
+    assert_equal 'text/plain', last_response['Content-Type']
+    assert_includes last_response.body, 'test data'
+  end
 end
