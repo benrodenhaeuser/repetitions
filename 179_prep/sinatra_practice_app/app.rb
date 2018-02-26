@@ -57,7 +57,7 @@ get '/index' do
 end
 
 get '/:filename' do
-  path_to_file = data_path + '/' + params[:filename]
+  path_to_file = File.join(data_path, params[:filename])
   if File.exist?(path_to_file)
     render_content(path_to_file)
   else
@@ -67,13 +67,14 @@ get '/:filename' do
 end
 
 get '/edit/:filename' do
+  path_to_file = File.join(data_path, params[:filename])
   @filename = params[:filename]
-  @file = File.read(data_path + '/' + @filename)
+  @file = File.read(path_to_file)
   erb(:edit_document)
 end
 
 post '/:filename' do
-  path_to_file = data_path + '/' + params[:filename]
+  path_to_file = File.join(data_path, params[:filename])
   File.write(path_to_file, params[:file_content])
   session[:message] = 'The file has been updated.'
   redirect '/index'

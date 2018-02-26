@@ -1,4 +1,11 @@
+<p<>Edit document '<%= @filename %>' below:</p>
+
 <form method="post" action="/<%= @filename %>">
-  <textarea name="file_content"><%= @file %></textarea>
-  <button type="submit">Submit changes</button>
+  <div>
+    <textarea rows="20" cols="50" name="file_content"><%= @file %></textarea>
+  </div>
+  <div>
+    <button type="submit">Submit changes</button>
+    <a href="/index">Cancel</a>
+  </div>
 </form>
