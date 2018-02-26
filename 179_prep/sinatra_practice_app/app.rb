@@ -56,6 +56,26 @@ get '/index' do
   erb(:index)
 end
 
+get '/new' do
+  erb(:new)
+end
+
+post '/create' do
+  filename = params[:filename]
+  path_to_file = File.join(data_path, filename)
+  File.write(path_to_file, '')
+  session[:message] = "The document #{filename} has been created."
+  redirect '/index'
+end
+
+post '/:filename/delete' do
+  filename = params[:filename]
+  path_to_file = File.join(data_path, filename)
+  File.delete(path_to_file)
+  session[:message] = "The document '#{filename}' has been deleted"
+  redirect '/index'
+end
+
 get '/:filename' do
   path_to_file = File.join(data_path, params[:filename])
   if File.exist?(path_to_file)
