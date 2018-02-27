@@ -12,3 +12,13 @@
 <div>
   <a href="/new">Create new document</a>
 </div>
+<p>
+  <% if session[:user] %>
+  Signed in as <%= session[:user] %>.
+  <form method="post" action="sign-out">
+    <button type="submit">Sign out</button>
+  </form>
+  <% else %>
+  <a href="/sign-in">Sign in</a>
+  <% end %>
+</p>

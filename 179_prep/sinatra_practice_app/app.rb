@@ -2,6 +2,12 @@ require 'sinatra'
 require 'sinatra/reloader'
 require "sinatra/content_for"
 require 'redcarpet'
+require 'yaml'
+
+configure do
+  enable :sessions
+  set :session_secret, "secret"
+end
 
 # ------------------------------------------------------------------
 # helpers
@@ -13,13 +19,16 @@ def data_path
   if ENV["RACK_ENV"] == "test"
     root + '/test/data'
   else
-    root = File.expand_path('..', __FILE__)
     root + '/data'
   end
 end
 
+def path_to_file(filename)
+  File.join(data_path, filename)
+end
+
 def file_list
-  pattern = data_path + '/*'
+  pattern = File.join(data_path, '*')
   Dir.glob(pattern).map { |file| File.basename(file) }
 end
 
@@ -36,11 +45,6 @@ def render_content(path_to_file)
   elsif File.extname(path_to_file) == '.md'
     erb(render_markdown(content))
   end
-end
-
-configure do
-  enable :sessions
-  set :session_secret, "secret"
 end
 
 # ------------------------------------------------------------------
@@ -60,42 +64,71 @@ get '/new' do
   erb(:new)
 end
 
+get '/sign-in' do
+  erb(:sign_in)
+end
+
+post '/sign-in' do
+  username = params[:username]
+  password = params[:password]
+
+  users = YAML.load(File.read('./users/users.yml'))
+
+  if users[username] == password
+    session[:message] = 'Welcome!'
+    session[:user] = username
+    redirect '/index'
+  else
+    session[:message] = 'Invalid credentials!'
+    erb(:sign_in)
+  end
+end
+
+post '/sign-out' do
+  session.delete(:user)
+  session[:message] = 'Goodbye!'
+  redirect '/index'
+end
+
 post '/create' do
   filename = params[:filename]
-  path_to_file = File.join(data_path, filename)
-  File.write(path_to_file, '')
+  path = path_to_file(filename)
+  File.write(path, '')
+
   session[:message] = "The document #{filename} has been created."
   redirect '/index'
 end
 
 post '/:filename/delete' do
   filename = params[:filename]
-  path_to_file = File.join(data_path, filename)
-  File.delete(path_to_file)
+  path = path_to_file(filename)
+  File.delete(path)
+
   session[:message] = "The document '#{filename}' has been deleted"
   redirect '/index'
 end
 
 get '/:filename' do
-  path_to_file = File.join(data_path, params[:filename])
-  if File.exist?(path_to_file)
-    render_content(path_to_file)
+  filename = params[:filename]
+  path = path_to_file(filename)
+
+  if File.exist?(path)
+    render_content(path)
   else
-    session[:message] = "The file #{params[:filename]} does not exist."
+    session[:message] = "The file #{filename} does not exist."
     redirect '/index'
   end
 end
 
 get '/edit/:filename' do
-  path_to_file = File.join(data_path, params[:filename])
   @filename = params[:filename]
-  @file = File.read(path_to_file)
+  @file = File.read(path_to_file(@filename))
   erb(:edit_document)
 end
 
 post '/:filename' do
-  path_to_file = File.join(data_path, params[:filename])
-  File.write(path_to_file, params[:file_content])
+  path = path_to_file(params[:filename])
+  File.write(path, params[:file_content])
   session[:message] = 'The file has been updated.'
   redirect '/index'
 end
