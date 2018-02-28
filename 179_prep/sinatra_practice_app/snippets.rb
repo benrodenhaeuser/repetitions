@@ -1,30 +1,29 @@
-def file_list
-  root = File.expand_path('..', __FILE__)
-  matcher = root + '/files/*'
-  Dir.glob(matcher).map do |file|
-    File.basename(file)
+require 'bcrypt'
+
+class PasswordDigester
+  def self.encrypt(password)
+    BCrypt::Password.create(password)
+  end
+
+  def self.check?(password, encrypted_password)
+    BCrypt::Password.new(encrypted_password) == password
   end
 end
 
-p file_list
+encrypted = PasswordDigester.encrypt('secret')
+# $2a$10$s.iTSdgsakxGo7cJgWFMweYPR9Z0ejH6wGAWFR/ghSeHkSn/EzYu2
+
+p PasswordDigester.check?('secret', encrypted)
+
+p PasswordDigester.encrypt('benspassword')
 
 
 =begin
 
-make files editable DONE
-
-- build edit template DONE
-  - form with textarea DONE
-  - textarea preloaded with current text for editing. DONE
-  - form posts to /edit/:filename DONE
-
-- build file edit get route (get '/edit/:filename') DONE
-  - renders the edit template DONE
-
-- build file edit post route (post '/edit/:filename') DONE
-  - updates the file in the filesystem DONE
-  - redirects to index DONE
-
-- link edit view from index template DONE
+- Validate supported file extension of document (.txt or .md).
+- Add a "duplicate" button that creates a new document based on an old one.
+- Extend the project with a user signup form.
+- Add the ability to upload images to the CMS (which could be referenced within markdown files).
+- Modify the CMS so that each *version* of a document is preserved as changes are made to it.
 
 =end
